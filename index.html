@@ -23,22 +23,16 @@
   <button onclick="comprarMoedas()">💰 Comprar Moedas</button>
 
   <script>
-    // 🔹 Endereço do servidor no Render
-    let ws = new WebSocket("wss://deduzindo.onrender.com");
+    // Conecta ao servidor WebSocket
+    let ws = new WebSocket("https://deduzindo.onrender.com");
 
-    ws.onopen = () => {
-      adicionarMensagem("✅ Conectado ao servidor!");
-    };
-
+    ws.onopen = () => adicionarMensagem("✅ Conectado ao servidor!");
     ws.onmessage = (event) => {
       let data = JSON.parse(event.data);
       if (data.chat) adicionarMensagem(data.chat);
       if (data.msg) adicionarMensagem("📢 " + data.msg);
     };
-
-    ws.onclose = () => {
-      adicionarMensagem("❌ Conexão encerrada com o servidor.");
-    };
+    ws.onclose = () => adicionarMensagem("❌ Conexão encerrada com o servidor.");
 
     function enviar() {
       let msg = document.getElementById("msg").value;
@@ -64,4 +58,3 @@
   </script>
 </body>
 </html>
-
