@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Número Chave - Jogo</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f9; text-align: center; padding: 20px; }
+    #chat { border: 1px solid #ccc; background: white; width: 80%; height: 250px; margin: auto; overflow-y: scroll; padding: 10px; text-align: left; }
+    input, button { margin: 5px; padding: 8px; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🎮 Jogo Número Chave</h1>
+  
+  <div id="chat"></div>
+  
+  <input id="msg" placeholder="Digite uma mensagem...">
+  <button onclick="enviar()">Enviar</button>
+  <br><br>
+  
+  <button onclick="ativarEscudo()">🛡️ Ativar Escudo</button>
+  <button onclick="comprarMoedas()">💰 Comprar Moedas</button>
+
+  <script>
+    // 🔹 TROQUE pelo endereço do seu servidor Render
+    let ws = new WebSocket("wss://numero-chave-game.onrender.com");
+
+    ws.onopen = () => {
+      adicionarMensagem("✅ Conectado ao servidor!");
+    };
+
+    ws.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      if (data.chat) adicionarMensagem(data.chat);
+      if (data.msg) adicionarMensagem("📢 " + data.msg);
+    };
+
+    ws.onclose = () => {
+      adicionarMensagem("❌ Conexão encerrada com o servidor.");
+    };
+
+    function enviar() {
+      let msg = document.getElementById("msg").value;
+      if (msg.trim() !== "") {
+        ws.send(JSON.stringify({acao: "chat", texto: msg}));
+        document.getElementById("msg").value = "";
+      }
+    }
+
+    function ativarEscudo() {
+      ws.send(JSON.stringify({acao: "escudo"}));
+    }
+
+    function comprarMoedas() {
+      ws.send(JSON.stringify({acao: "comprar"}));
+    }
+
+    function adicionarMensagem(texto) {
+      let chat = document.getElementById("chat");
+      chat.innerHTML += `<p>${texto}</p>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
