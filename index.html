@@ -23,8 +23,8 @@
   <button onclick="comprarMoedas()">💰 Comprar Moedas</button>
 
   <script>
-    // 🔹 TROQUE pelo endereço do seu servidor Render
-    let ws = new WebSocket("wss://numero-chave-game.onrender.com");
+    // 🔹 Endereço do servidor no Render
+    let ws = new WebSocket("wss://deduzindo.onrender.com");
 
     ws.onopen = () => {
       adicionarMensagem("✅ Conectado ao servidor!");
@@ -64,3 +64,4 @@
   </script>
 </body>
 </html>
+
